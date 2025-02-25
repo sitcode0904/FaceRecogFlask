@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content%}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="row justify-content-center">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card card-bg-fill h-90">
+
+            <div class="card-body p-4">
+
+                {% if error %}
+                    <p style="color: red;">{{ error }}</p>
+                {% endif %}
+
+                <div class="text-center mt-2">
+                    <h5 class="text-primary">Scan</h5>
+                </div>
+                <div class="p-2 mt-4 text-center">
+                    
+                    <form method="post" action="{{ url_for('detection') }}">
+
+                        <img src="{{ url_for('static', filename='images/scan.png') }}" alt="" height="250">
+
+                        <div class="mt-4">
+                            <button class="btn btn-success w-40" type="submit">Click to Scan</button>
+                        </div>
+
+                        
+                    </form>
+                    
+                    <form action = "{{ url_for('stop') }}" method = "post" enctype="multipart/form-data">          
+                        <input type = "submit" class="btn btn-danger w-40 mt-2" value="Stop">
+                                     </form>
+
+                   
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $('#register').removeClass('active');
+        $('#detect').addClass('active');
+
+        
+    });
+</script>
+
+{% endblock %}

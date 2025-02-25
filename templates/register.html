@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content%}
+
+<div class="row justify-content-center">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card mt-0 card-bg-fill">
+
+            <div class="card-body p-4 h-90">
+                <div class="text-center mt-2">
+                    <h5 class="text-primary">Register</h5>
+                    <p class="text-muted"></p>
+                </div>
+                <div class="p-2 mt-4">
+                    <form method="post" action="{{ url_for('submit') }}">
+                        
+                        <div class="row col-md-12">
+                            <div class="mb-3 col-md-4">
+                                <label for="id" class="form-label">Id</label>
+                                <input type="text" class="form-control" id="id" name="studentid" placeholder="Enter id" required>
+                            </div>
+    
+                            <div class="mb-3 col-md-4">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="studentname" placeholder="Enter name" required>
+                            </div>
+    
+                            <div class="mb-3 col-md-4">
+                                
+                                <label class="form-label" for="age">Age</label>
+                                <input type="text" class="form-control" id="age" name="studentage" placeholder="Enter age" required>
+                            </div>
+                        </div>
+
+                        
+
+                        <center>
+                            <div class="mt-5">
+                                <button class="btn btn-success w-50" type="submit">Click to register and capture images</button>
+                            </div>
+                        </center>
+                        
+
+                        
+
+                        
+                    </form>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+
+        
+    </div>
+</div>
+
+{% endblock %}

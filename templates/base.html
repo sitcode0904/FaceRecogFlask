@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="enable" data-theme="modern" data-theme-colors="green" data-layout-width="fluid">
+
+
+<!-- Mirrored from themesbrand.com/velzon/html/master/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 30 Aug 2024 05:27:04 GMT -->
+<head>
+
+    <meta charset="utf-8" />
+    <title>Facial Recognition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Facial Recognition with Python" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/UP-Police-1090.png') }}">
+
+    <!-- jsvectormap css -->
+    <link href="{{ url_for('static', filename='libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <!--Swiper slider css-->
+    <link href="{{ url_for('static', filename='libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- Layout config Js -->
+    <script src="{{ url_for('static', filename='js/layout.js') }}"></script>
+    <!-- Bootstrap Css -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{{ url_for('static', filename='css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{{ url_for('static', filename='css/app.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- custom Css-->
+    <link href="{{ url_for('static', filename='css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- <link rel="stylesheet" href="~/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.2/css/fixedHeader.dataTables.min.css">
+    <link href="~/assets/plugins/datatables/fixedColumns.dataTables.min.css" rel="stylesheet" /> -->
+
+    <style>
+        .dt-buttons {
+            margin-bottom: -5% !important;
+            float: left !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+        <header id="page-topbar">
+            <div class="layout-width">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box horizontal-logo">
+                            <a href="#" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="50">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="50">
+                                </span>
+                            </a>
+
+                            <a href="#" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="50">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="50">
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger material-shadow-none" id="topnav-hamburger-icon">
+                            <span class="hamburger-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </button>
+
+                    </div>
+
+                    <div class="d-flex align-items-center">
+
+
+
+
+                        <div class="ms-1 header-item d-none d-sm-flex">
+                            <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
+                                <i class='bx bx-fullscreen fs-22'></i>
+                            </button>
+                        </div>
+
+                        <div class="ms-1 header-item d-none d-sm-flex">
+                            <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
+                                <i class='bx bx-moon fs-22'></i>
+                            </button>
+                        </div>
+
+
+
+                        <div class="dropdown ms-sm-3 header-item topbar-user">
+                            <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="d-flex align-items-center">
+                                    <img class="rounded-circle header-profile-user" src="{{ url_for('static', filename='images/users/user-dummy-img.jpg') }}" alt="Header Avatar">
+                                    <span class="text-start ms-xl-2">
+                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"></span>
+                                        <!-- <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span> -->
+                                    </span>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <h6 class="dropdown-header">Welcome!</h6>
+                                <!-- <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                                     <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
+                                    <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
+                                    <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
+                                    <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
+                                    <a class="dropdown-item" href="auth-lockscreen-basic.html"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a> -->
+                                <a class="dropdown-item" href="#"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- removeNotificationModal -->
+        <div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="NotificationModalbtn-close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mt-2 text-center">
+                            <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                            <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                <h4>Are you sure ?</h4>
+                                <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Notification ?</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                            <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!</button>
+                        </div>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!-- ========== App Menu ========== -->
+        <div class="app-menu navbar-menu">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <!-- Dark Logo-->
+                <a href="#" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="50">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="90">
+                    </span>
+                </a>
+                <!-- Light Logo-->
+                <a href="#" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="50">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="90">
+                    </span>
+                </a>
+                <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+                    <i class="ri-record-circle-line"></i>
+                </button>
+            </div>
+
+
+            <div id="scrollbar">
+                <div class="container-fluid">
+
+
+                    <div id="two-column-menu">
+                    </div>
+                    <ul class="navbar-nav" id="navbar-nav">
+                        <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link active" href="/register" id="register">
+                                <i class="mdi mdi-file-plus-outline"></i> <span data-key="">Register</span>
+                            </a>
+                        </li>
+
+                        <!-- <li class="nav-item">
+                            <a class="nav-link menu-link" href="#">
+                                <i class="ri-settings-2-line"></i> <span data-key="">Train Model</span>
+                            </a>
+                        </li> -->
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/detect" id="detect">
+                                <i class="ri-body-scan-line"></i> <span data-key="">Detect</span>
+                            </a>
+                        </li>
+
+                        <!--<li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarDashboards">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics"> Analytics </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="dashboard-projects.html" class="nav-link" data-key="t-projects"> Projects </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>-->
+                        <!-- end Dashboard Menu -->
+
+
+                    </ul>
+                </div>
+                <!-- Sidebar -->
+            </div>
+
+            <div class="sidebar-background"></div>
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- Vertical Overlay-->
+        <div class="vertical-overlay"></div>
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                
+                {% block content %}
+
+                {% endblock %}
+
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                <script>document.write(new Date().getFullYear())</script> © Design & Developed by <span style="color:dodgerblue;font-weight:bold;">Think Computers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- end main content-->
+
+    </div>
+    <!-- END layout-wrapper -->
+    <!--start back-to-top-->
+    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+        <i class="ri-arrow-up-line"></i>
+    </button>
+    <!--end back-to-top-->
+    <!--preloader-->
+    <div id="preloader">
+        <div id="status">
+            <div class="text-primary avatar-sm" role="status">
+                <img src="{{ url_for('static', filename='images/UP-Police-1090.png') }}" alt="" height="100">
+                <!-- <span class="visually-hidden">Loading...</span> -->
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- JAVASCRIPT -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/node-waves/waves.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/feather-icons/feather.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+
+    <!-- apexcharts -->
+    <!-- Vector map-->
+    <script src="{{ url_for('static', filename='libs/jsvectormap/js/jsvectormap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/jsvectormap/maps/world-merc.js') }}"></script>
+
+    <!--Swiper slider js-->
+    <script src="{{ url_for('static', filename='libs/swiper/swiper-bundle.min.js') }}"></script>
+
+    <!-- Dashboard init -->
+    <script src="{{ url_for('static', filename='js/pages/dashboard-ecommerce.init.js') }}"></script>
+
+    <!-- App js -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+    <!-- <script src="~/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/plugins/jszip/jszip.min.js"></script>
+    <script src="~/assets/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/assets/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.2/js/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+    <script src="~/assets/plugins/datatables/dataTables.fixedColumns.min.js"></script>
+    <script src="~/assets/datatable/dataTables.tableTools.min.js"></script>
+    @*<script src="~/assets/dataTableBinder.js"></script>*@
+    <script src="~/assets/datatable/datatables-init.js"></script> -->
+
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+
+    <!-- <script>
+        $(document).ready(function () {
+            var table;
+
+            setTimeout(function () {
+                table = new DataTable('.example', {
+                    //columnDefs: [{ width: '50%', targets: 0 }],
+                    dom: "Blfrtip",
+                    //sScrollY: "500px",
+                    /* "autoWidth": false, */
+                    sScrollX: true,
+
+                    bScrollCollapse: true,
+                    //"paging": false,
+
+                    "sScrollXInner": "100%",
+                    //rowGroup: {
+                    //    dataSrc: [2]
+                    //},
+                    columnDefs: [
+                        { "className": "dt-center", "targets": "_all" },
+                        {
+                            searchable: false,
+                            orderable: false,
+                            targets: 0,
+                        },
+                        //{
+                        //    targets: [2],
+                        //    visible: false
+                        //}
+                    ],
+                    order: [],
+                    //order: [[1, 'asc']],
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: "Mathura Dashboard",
+                            //messageTop: "शिकायत प्रबंधन प्रणाली",
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            title: "Mathura Dashboard",
+                            //messageTop: "शिकायत प्रबंधन प्रणाली",
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+
+                        }, 'colvis'
+                    ]
+                });
+
+            }, 500);
+        });
+    </script> -->
+
+</body>
+
+</html>
