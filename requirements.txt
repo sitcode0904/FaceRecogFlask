@@ -1,6 +1,6 @@
 mediapipe
 pillow
-opencv-python-headless
+ --no-cache-dir opencv-python-headless
 flask
 flask_sqlalchemy
 gunicorn
