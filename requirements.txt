@@ -1,0 +1,5 @@
+mediapipe
+pillow
+opencv-python
+flask
+flask_sqlalchemy
