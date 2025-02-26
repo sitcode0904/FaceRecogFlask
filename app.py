@@ -170,7 +170,7 @@ def getprofile(id):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(host="0.0.0.0", debug=False)  # Set debug=False
+    app.run(debug=False)  # Set debug=False
 
 
 
