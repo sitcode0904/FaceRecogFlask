@@ -1,5 +1,6 @@
 import os
 import sqlite3
+
 import cv2
 import numpy as np
 from flask import Flask, redirect, render_template, request
@@ -13,6 +14,8 @@ faceDetect = cv2.CascadeClassifier(face_cascade_path)
 
 if faceDetect.empty():
     print("Error loading Haarcascade XML. Check file path!")
+
+cam = cv2.VideoCapture(0)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database.db')
@@ -31,7 +34,14 @@ class database_model(db.Model):
 
 @app.route("/")
 def hello_world():
-    return render_template("register.html")  
+    return render_template("register.html")
+
+@app.route('/stop', methods=['POST'])
+def stop():
+    if cam.isOpened():
+        cam.release()
+        cv2.destroyAllWindows()
+    return render_template('detect.html')
 
 @app.route("/register", methods=['POST', 'GET'])
 def submit():
@@ -43,11 +53,11 @@ def submit():
         insertorupdate(StudentId, StudentName, StudentAge)
 
         sampleNum = 0
-        cam = cv2.VideoCapture(0)  # Initialize camera inside function
+        cam.open(0)  
         if not cam.isOpened():
             return "Error: Camera not detected!"
 
-        while sampleNum < 20:
+        while True:
             ret, img = cam.read()
             if not ret:
                 return "Error capturing image from camera!"
@@ -62,7 +72,7 @@ def submit():
                 cv2.waitKey(100)
 
             cv2.imshow("Face", img)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == ord('q') or sampleNum > 20:
                 break
 
         cam.release()
@@ -72,15 +82,18 @@ def submit():
     return render_template("register.html")
 
 def insertorupdate(Id, Name, age):
-    existing_student = database_model.query.filter_by(StudentId=Id).first()
-    if existing_student:
-        existing_student.StudentName = Name
-        existing_student.StudentAge = age
+    conn = sqlite3.connect(os.path.join(basedir, 'database.db'))
+    cmd = "SELECT * FROM database_model WHERE StudentId=?"
+    cursor = conn.execute(cmd, (Id,))
+    isRecordExist = cursor.fetchone() is not None
+
+    if isRecordExist:
+        conn.execute("UPDATE database_model SET StudentName=?, StudentAge=? WHERE StudentId=?", (Name, age, Id))
     else:
-        new_student = database_model(StudentId=Id, StudentName=Name, StudentAge=age)
-        db.session.add(new_student)
+        conn.execute("INSERT INTO database_model (StudentId, StudentName, StudentAge) values(?,?,?)", (Id, Name, age))
     
-    db.session.commit()
+    conn.commit()
+    conn.close()
 
 @app.route("/detect", methods=['POST', 'GET'])
 def detection():
@@ -95,13 +108,14 @@ def detection():
         recognizer.train(faces, ids)
         recognizer.save('recognizer/trainingdata.yml')
 
-        cam = cv2.VideoCapture(0)
+        cam.open(0)
         if not cam.isOpened():
             return render_template("detect.html", error="Camera not detected!")
 
         while True:
             ret, img = cam.read()
             if not ret:
+                print("Error: Unable to capture image from camera!")
                 break  
 
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -111,10 +125,10 @@ def detection():
                 id, confidence = recognizer.predict(gray[y:y+h, x:x+w])
 
                 if confidence < 50:
-                    profile = database_model.query.filter_by(StudentId=id).first()  # SQLAlchemy query
+                    profile = getprofile(id)
                     if profile:
-                        cv2.putText(img, f"Name: {profile.StudentName}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
-                        cv2.putText(img, f"Age: {profile.StudentAge}", (x, y+h+30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
+                        cv2.putText(img, f"Name: {profile[1]}", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
+                        cv2.putText(img, f"Age: {profile[2]}", (x, y+h+30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
                     else:
                         cv2.putText(img, "No Data Exists", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
                 else:
@@ -135,10 +149,7 @@ def detection():
     return render_template("detect.html")
 
 def getimgwithid(path):
-    images_path = [os.path.join(path, f) for f in os.listdir(path) if f.endswith(".jpg")]
-    if not images_path:
-        return [], []
-
+    images_path = [os.path.join(path, f) for f in os.listdir(path)]
     faces = []
     ids = []
     for img_path in images_path:
@@ -147,14 +158,19 @@ def getimgwithid(path):
         id = int(os.path.split(img_path)[-1].split(".")[1])
         faces.append(faceNp)
         ids.append(id)
-        
     return np.array(ids), faces
+
+def getprofile(id):
+    conn = sqlite3.connect(os.path.join(basedir, 'database.db'))
+    cursor = conn.execute("SELECT * FROM database_model WHERE StudentId=?", (id,))
+    profile = cursor.fetchone()
+    conn.close()
+    return profile
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    port = int(os.environ.get("PORT", 10000))  # Default Render port
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True)
 
 
 
